@@ -11,7 +11,7 @@ function useFetch(query, page) {
       await setLoading(true);
       await setError(false);
       const response = await getAllOompaLoopma(page);
-      await setList((prev) => [...prev, ...response.results]);
+      await setList((prev) => [...new Set([...prev, ...response.results])]);
       setLoading(false);
     } catch (err) {
       setError(err);
