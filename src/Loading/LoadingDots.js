@@ -18,6 +18,9 @@ const LoadingDots = () => {
 };
 
 const MainDiv = styled.div`
-  margin-top: 50%;
+  margin-top: 0;
+  width: 50%;
+  align-self: center;
+  margin-left: 25%;
 `;
 export default LoadingDots;

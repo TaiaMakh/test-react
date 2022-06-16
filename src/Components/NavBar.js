@@ -1,12 +1,14 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import device from "../styles/device";
 import { BoldTitle } from "../styles/text";
 
 export default function NavBar() {
+  const navigate = useNavigate();
   return (
     <MainNavBarDiv>
-      <ContentDiv>
+      <ContentDiv onClick={() => navigate("/")}>
         <LogoIcon src="https://s3.eu-central-1.amazonaws.com/napptilus/level-test/imgs/logo-umpa-loompa.png" />
         <BoldTitle>Oompa Loompa's Crew</BoldTitle>
       </ContentDiv>
@@ -27,6 +29,7 @@ const LogoIcon = styled.img`
   margin-right: 25px;
 `;
 const ContentDiv = styled.div`
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;

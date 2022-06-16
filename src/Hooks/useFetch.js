@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getAllOompaLoopma } from "../services/OompaLoopmaService";
 
-function useFetch(query, page) {
+function useFetch(page) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [list, setList] = useState([]);
@@ -16,11 +16,11 @@ function useFetch(query, page) {
     } catch (err) {
       setError(err);
     }
-  }, [query, page]);
+  }, [page]);
 
   useEffect(() => {
-    getData(query);
-  }, [query, getData, page]);
+    getData(page);
+  }, [getData, page]);
 
   return { loading, error, list };
 }

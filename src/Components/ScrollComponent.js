@@ -10,14 +10,20 @@ import OompaLoopmaCard from "./OompaLoopmaCard";
 import SearchInput from "./SearchInput";
 
 export default function ScrollComponent() {
-  const [query, setQuery] = useState("");
+  // const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
-  const { loading, error, list } = useFetch(query, page);
+  const { loading, error, list } = useFetch(page);
   const loader = useRef(null);
   const [Search, setSearch] = useState("");
+  const [Searching, setSearching] = useState(false);
 
   useEffect(() => {
-    console.log(Search);
+    if (Search.length > 0) {
+      setSearching(true);
+    } else {
+      setSearching(false);
+    }
+    console.log(Search.length, "use effect line 20");
   }, [Search]);
 
   //   //for search input
@@ -26,9 +32,15 @@ export default function ScrollComponent() {
   //   };
 
   const handleObserver = useCallback((entries) => {
-    const target = entries[0];
-    if (target.isIntersecting) {
-      setPage((prev) => prev + 1);
+    console.log(Searching, "searching inside handleObserver");
+    console.log(entries, "entries");
+    console.log(Search, "search line 30");
+    if (Search.length < 1) {
+      console.log(Search, "entering donde no toca");
+      const target = entries[0];
+      if (target.isIntersecting) {
+        setPage((prev) => prev + 1);
+      }
     }
   }, []);
 
@@ -38,8 +50,11 @@ export default function ScrollComponent() {
       rootMargin: "20px",
       threshold: 0,
     };
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (loader.current) observer.observe(loader.current);
+    console.log(Search, "search line 46");
+    if (Search.length < 1) {
+      const observer = new IntersectionObserver(handleObserver, option);
+      if (loader.current) observer.observe(loader.current);
+    }
   }, [handleObserver]);
 
   const showOompasList = () => {
@@ -47,15 +62,14 @@ export default function ScrollComponent() {
     const lowerSearch = Search.toLowerCase();
     console.log(lowerSearch, "lower search");
     console.log(list);
-    const filtredResults = list.filter((oneOompa) => {
-      console.log(oneOompa.first_name.toLowerCase());
-      const lowerCaseResult = oneOompa.first_name.toLowerCase();
-      console.log(lowerCaseResult.includes(lowerSearch));
-      return lowerCaseResult.includes(lowerSearch);
-    });
+    const filtredResults = list.filter(
+      (oneOompa) =>
+        oneOompa.first_name.toLowerCase().includes(lowerSearch) ||
+        oneOompa.last_name.toLowerCase().includes(lowerSearch)
+    );
     console.log(filtredResults, "filtred results");
-    return filtredResults.map((oompa) => {
-      return <OompaLoopmaCard key={oompa.id} oompaLoompa={oompa} />;
+    return filtredResults.map((oompa, key) => {
+      return <OompaLoopmaCard key={key} oompaLoompa={oompa} />;
     });
   };
 
@@ -72,7 +86,7 @@ export default function ScrollComponent() {
         {list.length > 0 && showOompasList()}
         {loading && <LoadingDots />}
         {error && <p>Error</p>}
-        <div ref={loader} />
+        <BottomDivLoader ref={loader} />
       </OompaLoompasBox>
     </MarginDiv>
   );
@@ -106,4 +120,11 @@ const SearchDiv = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   margin-bottom: 2%;
+`;
+
+const BottomDivLoader = styled.div`
+  border: 1px solid red;
+  bottom: 0;
+  align-self: flex-end;
+  width: 20px;
 `;

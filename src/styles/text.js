@@ -51,4 +51,14 @@ export const ThinGreyItalic = styled.span`
   text-decoration: none;
   text-align: left;
 `;
+export const NormalText = styled.span`
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: #07252c;
+  text-decoration: none;
+  text-align: left;
+`;
 
