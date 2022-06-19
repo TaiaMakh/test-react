@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const getAllOompaLoopma = async (page) => {
-  console.log("getting oompas again");
+
+  console.log("getting oompas again", page, "page");
   try {
     const response = await axios.get(
       `https://2q2woep105.execute-api.eu-west-1.amazonaws.com/napptilus/oompa-loompas?page=${page}`

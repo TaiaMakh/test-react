@@ -13,29 +13,76 @@ import {
   ThinGreyText,
 } from "../../styles/text";
 import NavBar from "../NavBar";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import {
+  setOompasDetails,
+  setNewOompasDetailsList,
+} from "../../redux/actions/oompasActions";
+import { ActionTypes } from "../../redux/constants/actionTypes";
 
 export default function OompaLoompaDetail() {
   const [Loading, setLoading] = useState(true);
   const [OompaInfo, setOompaInfo] = useState({});
   const params = useParams();
+  const dispatch = useDispatch();
+
+  const oompasDetail = useSelector(
+    (state) => state.oompasStorage.oompasDetails
+  );
+  const oompaLoading = useSelector(
+    (state) => state.oompasStorage.loadingOneOompa
+  );
+
+  const dateNow = new Date();
+
+  const getOneOompaData = async () => {
+    try {
+      const response = await getOneOompaLoopma(params._id);
+      if (response) {
+        setOompaInfo(response);
+        setLoading(false);
+        dispatch(
+          setOompasDetails({
+            ...response,
+            date: new Date().toJSON(),
+            id: params._id,
+          })
+        );
+      }
+    } catch (err) {
+      dispatch({
+        type: ActionTypes.OOMPAS_ERROR,
+        payload: err,
+      });
+    }
+  };
+
 
   useEffect(() => {
-    (async function () {
-      try {
-        const response = await getOneOompaLoopma(params._id);
-        console.log(response);
-        if (response) {
-          setOompaInfo(response);
-          setLoading(false);
-        }
-      } catch {}
-    })();
+    const oneOompaDetail = oompasDetail.filter(
+      (oompa) => oompa.id === params._id
+    );
+    if (oneOompaDetail.length > 0) {
+      const takeOompasDate = new Date(oneOompaDetail[0].date);
+      if (dateNow.getDate() > takeOompasDate.getDate()) {
+        const newArrayOopmas = oompasDetail.filter(
+          (oompa) => oompa.id !== params._id
+        );
+        dispatch(setNewOompasDetailsList(newArrayOopmas));
+        getOneOompaData();
+      } else {
+        setOompaInfo(...oneOompaDetail);
+      }
+    } else {
+      getOneOompaData();
+    }
   }, []);
 
   return (
     <div>
       <NavBar />
-      {Loading ? (
+      {oompaLoading ? (
         <LoadingDots />
       ) : (
         <CardDiv>
