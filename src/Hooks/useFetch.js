@@ -20,9 +20,10 @@ function useFetch(page) {
       await setLoading(true);
       await setError(false);
       const response = await getAllOompaLoopma(page);
+      console.log(response, "responsee");
       await setList((prev) => [...new Set([...prev, ...response.results])]);
       setLoading(false);
-      dispatch(setAllOompas(response.results));
+      dispatch(setAllOompas({...response, date: new Date().toJSON()}));
     } catch (err) {
       setError(err);
       dispatch({

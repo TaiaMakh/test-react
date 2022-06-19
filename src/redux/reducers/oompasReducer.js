@@ -12,7 +12,7 @@ export const oompasReducer = (state = initialState, { type, payload }) => {
     case ActionTypes.GET_ALL_LOOMPAS:
       return {
         ...state,
-        oompas: [...state.oompas, ...payload],
+        oompas: [...state.oompas, payload],
         loading: false,
       };
     case ActionTypes.GET_ONE_LOOMPA:

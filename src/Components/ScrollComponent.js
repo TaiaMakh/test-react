@@ -17,21 +17,40 @@ export default function ScrollComponent() {
   const oompasLoading = useSelector((state) =>
     console.log(state.oompasStorage.loading, "state line 16")
   );
+
+  const [OompasListShow, setOompasListShow] = useState([]);
   // const [query, setQuery] = useState("");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const { loading, error, list } = useFetch(page);
   const loader = useRef(null);
   const [Search, setSearch] = useState("");
 
+  // const getOompasListStorage = () => {
+  //   let oompas = [];
+  //   oompasList.map((obj) => {
+  //     return obj.results.map((oompasPage) => {
+  //       return oompas.push(oompasPage);
+  //     });
+  //   });
+  //   setOompasListShow([...OompasListShow, oompas]);
+  //   console.log(oompas);
+  // };
+
+  // useEffect(() => {
+  //   getOompasListStorage();
+  // }, [page]);
+
+  // useEffect(() => {
+  //   console.log(OompasListShow);
+  // }, [OompasListShow]);
+
   const handleChangePage = () => {
-    console.log("entering here");
     if (Search.length === 0) {
       setPage((prev) => prev + 1);
     }
   };
   const handleObserver = useCallback(
     (entries) => {
-      console.log("enter handle observer");
       if (Search.length === 0) {
         const target = entries[0];
         if (target.isIntersecting) {
@@ -57,7 +76,16 @@ export default function ScrollComponent() {
 
   const showOompasList = () => {
     const lowerSearch = Search.toLowerCase();
-    const filtredResults = oompasList.filter(
+
+    const oompas = [];
+
+    oompasList.map((obj) => {
+      return obj.results.map((oompasPage) => {
+        return oompas.push(oompasPage);
+      });
+    });
+
+    const filtredResults = oompas.filter(
       (oneOompa) =>
         oneOompa.first_name.toLowerCase().includes(lowerSearch) ||
         oneOompa.last_name.toLowerCase().includes(lowerSearch)

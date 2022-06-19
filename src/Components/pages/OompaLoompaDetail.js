@@ -90,7 +90,7 @@ export default function OompaLoompaDetail() {
           <ColumnText>
             <RowDiv>
               <BoldTitle>
-                {OompaInfo.first_name}
+                {OompaInfo.first_name}{" "}
                 {OompaInfo.last_name}
               </BoldTitle>
             </RowDiv>
