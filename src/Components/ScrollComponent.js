@@ -84,7 +84,7 @@ export default function ScrollComponent() {
           {error != null && <p>Error</p>}
         </OompaLoompasBox>
       </div>
-      <BottomDivLoader ref={loader} />
+      {Search.length === 0 && <BottomDivLoader ref={loader} />}
     </MarginDiv>
   );
 }
@@ -111,7 +111,7 @@ const MainTitleBox = styled.div`
 const OompaLoompasBox = styled.div`
   display: flex;
   flex-direction: column;
- 
+
   margin-top: 5%;
   @media ${device.mobileL} {
     flex-direction: row;
