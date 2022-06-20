@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/oompa-loompa/:_id" element={<OompaLoompaDetail />} />
+        <Route path="/:_id" element={<OompaLoompaDetail />} />
       </Routes>
     </Router>
   );

@@ -8,7 +8,7 @@ export default function OompaLoopmaCard({ oompaLoompa }) {
 
   return (
     <CardDiv>
-      <Link to={`/oompa-loompa/${oompaLoompa.id}`}>
+      <Link to={`/${oompaLoompa.id}`}>
         <MainImage src={oompaLoompa.image} />
         <ColumnDiv>
           <BoldTitle>
