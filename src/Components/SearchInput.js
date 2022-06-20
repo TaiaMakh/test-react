@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import device from "../styles/device";
 
 export default function SearchInput(props) {
   return (
@@ -18,7 +19,7 @@ export default function SearchInput(props) {
 }
 
 const SearchBox = styled.div`
-  width: 25%;
+  width: 50%;
   display: flex;
   flex-direction: row;
   align-items: space-between;
@@ -27,6 +28,9 @@ const SearchBox = styled.div`
   border: 1px solid #acacac;
   box-sizing: border-box;
   border-radius: 12px;
+  @media ${device.mobileL} {
+    width: 25%;
+  }
 `;
 
 export const Input = styled.input`

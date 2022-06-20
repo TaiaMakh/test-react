@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { BoldTitle, ThinGreyItalic, ThinGreyText } from "../styles/text";
 import { Link } from "react-router-dom";
+import device from "../styles/device";
 
 export default function OompaLoopmaCard({ oompaLoompa }) {
-  // console.log(oompaLoompa, "component card oompa received");
 
   return (
     <CardDiv>
@@ -29,8 +29,11 @@ const CardDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  max-width: 30%;
+  max-width: 100%;
   margin-bottom: 2%;
+  @media ${device.mobileL} {
+    max-width: 30%;
+  }
 `;
 const MainImage = styled.img`
   max-width: 100%;

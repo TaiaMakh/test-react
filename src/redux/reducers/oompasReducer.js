@@ -5,6 +5,7 @@ const initialState = {
   oompasDetails: [],
   loading: true,
   loadingOneOompa: true,
+  errorData: null
 };
 
 export const oompasReducer = (state = initialState, { type, payload }) => {
@@ -15,6 +16,11 @@ export const oompasReducer = (state = initialState, { type, payload }) => {
         oompas: [...state.oompas, payload],
         loading: false,
       };
+    case ActionTypes.RESET_ALL_OOMPAS:
+      return {
+        ...state,
+        oompas: []
+      }
     case ActionTypes.GET_ONE_LOOMPA:
       return {
         ...state,
@@ -29,7 +35,7 @@ export const oompasReducer = (state = initialState, { type, payload }) => {
     case ActionTypes.OOMPAS_ERROR:
       return {
         loading: false,
-        error: payload,
+        errorData: payload,
       };
     default:
       return state;

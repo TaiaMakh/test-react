@@ -19,3 +19,8 @@ export const setNewOompasDetailsList = (oompas) => {
     payload: oompas,
   };
 };
+export const setEmptyOompasPage = () => {
+  return {
+    type: ActionTypes.RESET_ALL_OOMPAS
+  }
+}

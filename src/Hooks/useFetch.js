@@ -1,31 +1,22 @@
 import { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { setAllOompas } from "../redux/actions/oompasActions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAllOompas,
+  setEmptyOompasPage,
+} from "../redux/actions/oompasActions";
 import { ActionTypes } from "../redux/constants/actionTypes";
 import { getAllOompaLoopma } from "../services/OompaLoopmaService";
 
 function useFetch(page) {
-    console.log("entering in useFetch");
-  //redux
   const dispatch = useDispatch();
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [list, setList] = useState([]);
-
+  const dateNow = new Date();
+  const oompasList = useSelector((state) => state.oompasStorage.oompas);
 
   const getData = useCallback(async () => {
-  
     try {
-      await setLoading(true);
-      await setError(false);
       const response = await getAllOompaLoopma(page);
-      console.log(response, "responsee");
-      await setList((prev) => [...new Set([...prev, ...response.results])]);
-      setLoading(false);
-      dispatch(setAllOompas({...response, date: new Date().toJSON()}));
+      dispatch(setAllOompas({ ...response, date: new Date().toJSON() }));
     } catch (err) {
-      setError(err);
       dispatch({
         type: ActionTypes.OOMPAS_ERROR,
         payload: err,
@@ -34,10 +25,25 @@ function useFetch(page) {
   }, [page]);
 
   useEffect(() => {
-    getData(page);
-  }, [getData, page]);
+    (async function () {
+      if (oompasList.length > 0) {
+        const dateFirstPage = new Date(oompasList[0].date);
 
-  return { loading, error, list };
+        if (dateNow.getDate() > dateFirstPage.getDate()) {
+          dispatch(setEmptyOompasPage());
+          return await getData(page);
+        }
+        const oompaPage = oompasList.filter((oompaObj) => {
+          return oompaObj.current === page;
+        });
+        if (oompaPage.length === 0) {
+          getData(page);
+        }
+      } else {
+        getData(page);
+      }
+    })();
+  }, [getData, page]);
 }
 
 export default useFetch;

@@ -11,67 +11,40 @@ import OompaLoopmaCard from "./OompaLoopmaCard";
 import SearchInput from "./SearchInput";
 
 export default function ScrollComponent() {
-  //redux
   const oompasList = useSelector((state) => state.oompasStorage.oompas);
-  useSelector((state) => console.log(state.oompasStorage.oompas));
-  const oompasLoading = useSelector((state) =>
-    console.log(state.oompasStorage.loading, "state line 16")
-  );
-
-  const [OompasListShow, setOompasListShow] = useState([]);
-  // const [query, setQuery] = useState("");
+  const oompasLoading = useSelector((state) => state.oompasStorage.loading);
+  const error = useSelector((state) => state.oompasStorage.errorData);
   const [page, setPage] = useState(1);
-  const { loading, error, list } = useFetch(page);
+  useFetch(page);
+
   const loader = useRef(null);
   const [Search, setSearch] = useState("");
 
-  // const getOompasListStorage = () => {
-  //   let oompas = [];
-  //   oompasList.map((obj) => {
-  //     return obj.results.map((oompasPage) => {
-  //       return oompas.push(oompasPage);
-  //     });
-  //   });
-  //   setOompasListShow([...OompasListShow, oompas]);
-  //   console.log(oompas);
-  // };
-
-  // useEffect(() => {
-  //   getOompasListStorage();
-  // }, [page]);
-
-  // useEffect(() => {
-  //   console.log(OompasListShow);
-  // }, [OompasListShow]);
+  useEffect(() => {
+    if (oompasList.length > 0) {
+      const actualPage = oompasList[oompasList.length - 1].current;
+      setPage(actualPage);
+    }
+  }, []);
 
   const handleChangePage = () => {
     if (Search.length === 0) {
       setPage((prev) => prev + 1);
     }
   };
-  const handleObserver = useCallback(
-    (entries) => {
-      if (Search.length === 0) {
-        const target = entries[0];
-        if (target.isIntersecting) {
-          // setPage((prev) => prev + 1);
-          handleChangePage();
-        }
-      }
-    },
-    [Search]
-  );
+  const handleObserver = useCallback((entries) => {
+    const target = entries[0];
+    target.isIntersecting && handleChangePage();
+  }, []);
 
   useEffect(() => {
     const option = {
       root: null,
       rootMargin: "20px",
-      threshold: 0,
+      threshold: 1.0,
     };
-    // if (Search.length < 1) {
     const observer = new IntersectionObserver(handleObserver, option);
     if (loader.current) observer.observe(loader.current);
-    // }
   }, [handleObserver]);
 
   const showOompasList = () => {
@@ -97,19 +70,21 @@ export default function ScrollComponent() {
 
   return (
     <MarginDiv>
-      <MainTitleBox>
-        <SearchDiv>
-          <SearchInput setSearch={setSearch} />
-        </SearchDiv>
-        <MainTitle>Find your Oompa Loompa</MainTitle>
-        <MainSubtitleGrey>There are more than 100k</MainSubtitleGrey>
-      </MainTitleBox>
-      <OompaLoompasBox>
-        {oompasList.length > 0 && showOompasList()}
-        {oompasLoading && <LoadingDots />}
-        {error && <p>Error</p>}
-        <BottomDivLoader ref={loader} />
-      </OompaLoompasBox>
+      <div>
+        <MainTitleBox>
+          <SearchDiv>
+            <SearchInput setSearch={setSearch} />
+          </SearchDiv>
+          <MainTitle>Find your Oompa Loompa</MainTitle>
+          <MainSubtitleGrey>There are more than 100k</MainSubtitleGrey>
+        </MainTitleBox>
+        <OompaLoompasBox>
+          {oompasList.length > 0 && showOompasList()}
+          {oompasLoading && <LoadingDots />}
+          {error != null && <p>Error</p>}
+        </OompaLoompasBox>
+      </div>
+      <BottomDivLoader ref={loader} />
     </MarginDiv>
   );
 }
@@ -118,7 +93,12 @@ const MarginDiv = styled.div`
   margin: 0 5% 0;
   @media ${device.mobileL} {
     margin: 0 10% 0;
+    min-width: 80%;
   }
+  min-height: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 const MainTitleBox = styled.div`
   display: flex;
@@ -130,10 +110,14 @@ const MainTitleBox = styled.div`
 
 const OompaLoompasBox = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
+ 
   margin-top: 5%;
+  @media ${device.mobileL} {
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 `;
 const SearchDiv = styled.div`
   width: 100%;
@@ -141,11 +125,13 @@ const SearchDiv = styled.div`
   flex-direction: row;
   align-items: flex-end;
   justify-content: flex-end;
-  margin-bottom: 2%;
+  margin-bottom: 8%;
+  @media ${device.mobileL} {
+    margin-bottom: 2%;
+  }
 `;
 
 const BottomDivLoader = styled.div`
-  border: 1px solid red;
   bottom: 0;
   align-self: flex-end;
   width: 20px;

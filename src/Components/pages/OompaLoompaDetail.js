@@ -22,7 +22,6 @@ import {
 import { ActionTypes } from "../../redux/constants/actionTypes";
 
 export default function OompaLoompaDetail() {
-  const [Loading, setLoading] = useState(true);
   const [OompaInfo, setOompaInfo] = useState({});
   const params = useParams();
   const dispatch = useDispatch();
@@ -41,7 +40,6 @@ export default function OompaLoompaDetail() {
       const response = await getOneOompaLoopma(params._id);
       if (response) {
         setOompaInfo(response);
-        setLoading(false);
         dispatch(
           setOompasDetails({
             ...response,
@@ -57,7 +55,6 @@ export default function OompaLoompaDetail() {
       });
     }
   };
-
 
   useEffect(() => {
     const oneOompaDetail = oompasDetail.filter(
@@ -90,8 +87,7 @@ export default function OompaLoompaDetail() {
           <ColumnText>
             <RowDiv>
               <BoldTitle>
-                {OompaInfo.first_name}{" "}
-                {OompaInfo.last_name}
+                {OompaInfo.first_name} {OompaInfo.last_name}
               </BoldTitle>
             </RowDiv>
             <ThinGreyText>
@@ -114,30 +110,44 @@ export default function OompaLoompaDetail() {
 
 const CardDiv = styled.div`
   display: flex;
-  flex-direction: row;
-  max-width: 80%;
+  flex-direction: column;
+  max-width: 100%;
   margin: 5% 5% 0;
   @media ${device.mobileL} {
+    flex-direction: row;
+    align-items: flex-start;
+    align-content: flex-start;
     margin: 10% 10% 0;
+    max-width: 80%;
   }
 `;
 const MainPicture = styled.img`
-  max-width: 50%;
+  max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   margin-right: 2%;
+  @media ${device.mobileL} {
+    max-width: 50%;
+  }
 `;
 const ColumnText = styled.div`
-max-width: 50%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   justify: content: flex-start;
+   @media ${device.mobileL} {
+    max-width: 50%;
+  }
 `;
 const RowDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 5px;
+  margin-top: 15px;
+  @media ${device.mobileL} {
+    margin-top: 0;
+  }
 `;
 const TextDiv = styled.div`
   margin-top: 10px;
