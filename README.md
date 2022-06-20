@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+# GFront-End Developer Test
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+It is a front end test project in which you can consult a total list of items that are loaded and updated as you scroll the main screen. You can also see the detail of an item.
+Once application is running all the items will be consulted to the api just one time  and stored inside storage application until one day has passed.
 
 ## Available Scripts
 
