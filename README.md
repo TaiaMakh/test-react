@@ -1,4 +1,4 @@
-# GFront-End Developer Test
+# Front-End Developer Test
 
 It is a front end test project in which you can consult a total list of items that are loaded and updated as you scroll the main screen. You can also see the detail of an item.
 Once application is running all the items will be consulted to the api just one time  and stored inside storage application until one day has passed.
